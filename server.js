@@ -1,50 +1,43 @@
 var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
-
+var PORT = process.argv.PORT || 3000;
 var path = require("path");
-// var logger = function(req, res, next){
-//     console.log("Logging");
-//     next();
-// }
+// // parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// app.use(logger);
-
-// parse application/json
-app.use(bodyParser.json())
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+// // parse application/json
+// app.use(bodyParser.json())
  //because I have 2 files in the public file how do I specify which I want to be the main?
-app.use(express.static(path.join(__dirname, "public/home.html")))
+// app.use(express.static(path.join(__dirname, "public")))
 
-var friendsList= [
-    {
-        name: "Joan",
-        photo: 25,
-        scores: []
-    },
-    {
-        name: "Jeff",
-        photo: 35,
-        scores:[]
-    }
-]
-
-app.get("/", function (req, res){
-//want to pass the home page in this file
-    res.json(friendsList);
-})
-
-
-
-app.listen(3000, function(){
-    console.log("Server Started on Port 3000")
-});
-
+//use change accepted type for parsers in body 
+// parse various different custom JSON types as JSON
+app.use(bodyParser.json({ type: 'application/*+json' }))
  
+// parse some custom thing into a Buffer
+app.use(bodyParser.raw({ type: 'application/vnd.custom-type' }))
+ 
+// parse an HTML body into a string
+app.use(bodyParser.text({ type: 'text/html' }))
+// var survey = require("../public/survey.html");
 
-// app.use(function (req, res) {
-//   res.setHeader('Content-Type', 'text/plain')
-//   res.write('you posted:\n')
-//   res.end(JSON.stringify(req.body, null, 2))
-// })
+require("./app/routing/htmlRoutes.js")(app);
+require("./app/routing/apiRoutes.js")(app);
+
+// $.post('/api/friends', userInput)
+
+// app.get("/home", function (req, res){
+//     //want to pass the home page in this file
+//     console.log("its working");
+//         res.sendFile(path.join(__dirname, "../public/home.html"));
+//     })
+    
+// app.get("/survey", function (req, res){
+//     //want to pass the survey page in this file
+//     res.sendFile(path.join(__dirname, "../public/survey.html"));
+//     })
+    
+app.listen(PORT, function(){
+    console.log("Server Started on Port 3000")
+}) 
