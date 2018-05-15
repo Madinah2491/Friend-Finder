@@ -6,10 +6,11 @@ module.exports = function (app) {
 
 
     app.get('/api/friends', function(req, res){
+        // console.log(friends);
         res.json(friends);
     });
 
-    //should post the newly input user info into the friendsArray in the below format
+  //  should post the newly input user info into the friendsArray in the below format
     app.post('/api/friends', function(req, res){
         var bestie = {
             name:"",
@@ -42,5 +43,5 @@ module.exports = function (app) {
         res.json(bestie);
     }
 
-    )
+    );
 }

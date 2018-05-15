@@ -138,67 +138,95 @@
     
 </body>
 
-	<!-- Modal dialog should display the friend match -->
-	<div id="modal1" class="modal">
-		<div class="modal-content">
-			<h4>Closest Friend Match</h4>
-			<div class="divider"></div>
-			<h5 id="userMatch"></h5>
-			<img id="userMatchImage" class="materialboxed" width="650" src="">
-		</div>
-		<div class="modal-footer">
-			<a href="" >Fill Again!</a>
-		</div>
-	</div>
+	<!-- Modal should display the friend match -->
+    <div class="modal" id="resultsModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Best Match</h3>
+                    <button type="button" class="close" onclick="location.reload()" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    
+                </div>
+                <div class="modal-body">
+                    <h3 id="matchName"></h3>
+                    <img id="matchImg" src="http://via.placeholder.com/350x250" alt="">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="location.reload()" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 <script>
 
     $(document).ready(function() {
-    console.log('hellooo!!!')
 
         $('#Submit').on('click', function(){
-            
-            //function to keep bad data or incomplete forms out of my system
-            function validateForm(){
-                var isValid = true;
-                $(".formcontrol").each(function(){
-                    if($(this).value()===""){
-                        isValid = false;
-                    }
-                });
+            event.preventDefault();
+        // check that input is valid
+        for (var i = 1; i < 11; i++) {
+            if ($.trim($("#q" + [i]).val()) === "" || $("#q" + [i]).val().trim() === "choose one") {
+                alert("Please fill out all fields before submitting!");
+                return false;
+            };
+        };
 
-                $(".chosen-select").each(function(){
-                    if($(this).value()===""){
-                    isValid = false;
-                }
-                });
-                return isValid;
-            }
+        if ($.trim($("#name").val()) === "" || $.trim($("#name").val()) === "name") {
+            alert("Fill out all fields before submitting!");
+            $("#name").val("Enter a valid name");
+            return false;
 
-            if (validateForm()){}
-                var aboutme = {
-                    name: $('#nametag').val(),
-                    photo: $('#photo').val(),
-                    scores:[
-                        $("#q1").val().trim(),
-                        $("#q2").val().trim(),
-                        $("#q3").val().trim(),
-                        $("#q4").val().trim(),
-                        $("#q5").val().trim(),
-                        $("#q6").val().trim(),
-                        $("#q7").val().trim(),
-                        $("#q8").val().trim(),
-                        $("#q9").val().trim(),
-                        $("#q10").val().trim()
-                    ]
-                };
+      } else if ($.trim($("#photo").val()) === "" || $.trim($("#url").val()) === "photo") {
+            $("#photo").val("Enter a valid url address");
+            alert("Fill out all fields before submitting!");
+            return false;
+        } else {
+            var data = {
+                name: $("#nametag").val().trim(),
+                photo: $("#photo").val().trim(),
+                scores: [$("#q1").val(),
+                 $("#q2").val(),
+                 $("#q3").val(),
+                 $("#q4").val(),
+                 $("#q5").val(),
+                 $("#q6").val(), 
+                 $("#q7").val(), 
+                 $("#q8").val(), 
+                 $("#q9").val(), 
+                 $("#q10").val()
+                ]
+            };
+
             var currentURL = window.location.orgin;
 
-            $.post(currentURL + "api/friends", data, function(data){
-                alert("working")
+            $.post(currentURL + "/api/friends", data, function (data) {
+                $("#matchName").text(data.name);
+                $("#matchImg").attr("src", data.photo);
+                // Show the modal with the best match 
+                $("#resultsModal").modal("toggle");
             });
-        }
-    )
-})
+        };
+    });
+});
+//             //function to keep bad data or incomplete forms out of my system
+//             function validateForm(){
+//                 var isValid = true;
+//                 $(".formcontrol").each(function(){
+//                     if($(this).value()===""){
+//                         isValid = false;
+//                     }
+//                 });
+
+//                 $(".chosen-select").each(function(){
+//                     if($(this).value()===""){
+//                     isValid = false;
+//                 }
+//                 });
+//                 return isValid;
+//             }
 
 </script>
 </html>
