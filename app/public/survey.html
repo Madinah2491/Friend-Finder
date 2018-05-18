@@ -10,7 +10,8 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  
+    <script src = "https://code.jquery.com/jquery.js"></script>
+
 </head>
 <body>
     <div class="container">
@@ -134,7 +135,7 @@
             </form>
         <br>
 
-    <button type="submit">Submit</button>
+    <button type="submit" id ="Submit">Submit</button>
     
 </body>
 
@@ -163,26 +164,27 @@
 <script>
 
     $(document).ready(function() {
-
+console.log("js loaded!");
         $('#Submit').on('click', function(){
+            console.log("we got clicked:)");
             event.preventDefault();
         // check that input is valid
         for (var i = 1; i < 11; i++) {
             if ($.trim($("#q" + [i]).val()) === "" || $("#q" + [i]).val().trim() === "choose one") {
-                alert("Please fill out all fields before submitting!");
-                return false;
+                // alert("Please fill out all fields before submitting!");
+                // return false;
             };
         };
 
         if ($.trim($("#name").val()) === "" || $.trim($("#name").val()) === "name") {
-            alert("Fill out all fields before submitting!");
+            // alert("Fill out all fields before submitting!");
             $("#name").val("Enter a valid name");
-            return false;
+            // return false;
 
       } else if ($.trim($("#photo").val()) === "" || $.trim($("#url").val()) === "photo") {
             $("#photo").val("Enter a valid url address");
-            alert("Fill out all fields before submitting!");
-            return false;
+            // alert("Fill out all fields before submitting!");
+            // return false;
         } else {
             var data = {
                 name: $("#nametag").val().trim(),
@@ -201,8 +203,8 @@
             };
 
             var currentURL = window.location.orgin;
-
-            $.post(currentURL + "/api/friends", data, function (data) {
+console.log("about to post!");
+            $.post("/api/friends", data, function (data) {
                 $("#matchName").text(data.name);
                 $("#matchImg").attr("src", data.photo);
                 // Show the modal with the best match 

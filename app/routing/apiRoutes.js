@@ -12,6 +12,7 @@ module.exports = function (app) {
 
   //  should post the newly input user info into the friendsArray in the below format
     app.post('/api/friends', function(req, res){
+        console.log("we hit!");
         var bestie = {
             name:"",
             photo:"",
